@@ -1,4 +1,5 @@
 import pygame
+import time
 import random
 
 pygame.init()
@@ -10,9 +11,11 @@ green = (100, 100, 100)
 global white
 white = (250, 250, 250)
 global coll
-coll = black
+
+# coll = black
 
 display = pygame.display.set_mode((size_x, size_y))
+surf = pygame.Surface((size_x, size_y))
 font = pygame.font.Font(None, 40)
 font_1 = pygame.font.Font(None, 25)
 font_score = pygame.font.Font(None, 65)
@@ -30,11 +33,15 @@ class Menu:
         self._option_index = 0
         self._colors = []
 
-    # def set_colors(self, green, xz):
-    #     gr = (100, 100, 100)
-    #     # x_z = (0, 150,100)
-    #     self._colors.append(green, gr)
-    #     # self._colors.append(xz, x_z)
+    def no(self, no):
+        no = False
+        self._option_surface.append(no)
+
+    def set_colors(self, green, xz):
+        gr = (100, 100, 100)
+        # x_z = (0, 150,100)
+        self._colors.append(green, gr)
+        # self._colors.append(xz, x_z)
 
     def append_option(self, option, callback):
         self._option_surface.append(font.render(option, True, white))
@@ -54,6 +61,11 @@ class Menu:
                 pygame.draw.rect(surf, green, option_rect)
             surf.blit(option, option_rect)
 
+c = False
+if c == True:
+    coll = white
+else:
+    coll = black
 
 def game_2():
     done = True
@@ -69,93 +81,91 @@ def game_2():
     check_win = 0
     global score
     score = score
-    coll = black
-    # puse = False
-
-    # if puse:
-    #     text_pause = font_score.render("paused", True, green)
-    #     display.blit(text_pause, (280, 170))
-    #     pygame.display.update()
-    # else:
-    # done
+    # coll =
+    a = False
     while done:
-        clock.tick(fps)
-        for events in pygame.event.get():
-            if events.type == pygame.QUIT or events.type == pygame.KEYDOWN and events.key == pygame.K_ESCAPE:
-                quit()
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]:
-            if point + 50 < 600:
-                point += 5
-        if keys[pygame.K_LEFT]:
-            if point > 0:
-                point -= 5
-        if keys[pygame.K_BACKSPACE]:
-            done = False
-        if point <= x <= point + 50 and size_y - 5 <= y + r <= size_y:
-            if check_win >= score:
-                score += 1
-            direct_x += 0.5
-            direct_y += 0.5
-            direct_y = -direct_y
-            check_win += 1
+        if a:
+            for eve in pygame.event.get():
+                if eve.type == pygame.QUIT or eve.type == pygame.KEYDOWN and eve.key == pygame.K_ESCAPE:
+                    quit()
+                if eve.type == pygame.KEYDOWN:
+                    if eve.key == pygame.K_SPACE:
+                        a = False
+            text_pause = font_score.render("pause", True, white)
+            display.blit(text_pause, (230, 125))
+            pygame.display.update()
+        else:
+            clock.tick(fps)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        surf.fill((40, 40, 40))
+                        surf.set_alpha(150)
+                        display.blit(surf, (50, 50))
+                        a = not a
+                        pygame.display.update()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_RIGHT]:
+                if point + 50 < 600:
+                    point += 5
+            if keys[pygame.K_LEFT]:
+                if point > 0:
+                    point -= 5
+            if keys[pygame.K_BACKSPACE]:
+                done = False
+            if point <= x <= point + 50 and size_y - 5 <= y + r <= size_y:
+                if check_win >= score:
+                    score += 1
+                direct_x += 0.5
+                direct_y += 0.5
+                direct_y = -direct_y
+                check_win += 1
 
-        # if keys[pygame.K_SPACE]:
-        #     puse = True
-        #     puse = not puse
+            display.fill(coll)
+            text_game_score = font_score.render(f"{check_win}", True, green)
+            display.blit(text_game_score, (280, 170))
+            # text_score = font_1.render(f"your score: {score}", True, green)
+            # display.blit(text_score, (0, 0))
+            pygame.draw.rect(display, white, (point, 395, 50, 5))
+            pygame.draw.circle(display, white, (x, y), r)
+            if a == True:
+                display.blit(surf, (0, 0))
+            x += direct_x
+            if x + r >= 600 or x - r < 0:
+                direct_x = -direct_x
+            y += direct_y
+            if y - r <= 0:
+                direct_y = -direct_y
+            if y + r >= 450:
+                y = random.randint(10, 200)
+                x = random.randint(10, 600)
+                # check_lose += 1
+                # check_win = 0
+                direct_y = 1
+                direct_x = 1
+                score = score
+                # game = True
+                done = False
 
-        display.fill(coll)
-        text_game_score = font_score.render(f"{check_win}", True, green)
-        display.blit(text_game_score, (280, 170))
-        # text_score = font_1.render(f"your score: {score}", True, green)
-        # display.blit(text_score, (0, 0))
-        pygame.draw.rect(display, white, (point, 395, 50, 5))
-        pygame.draw.circle(display, white, (x, y), r)
-        x += direct_x
-        if x + r >= 600 or x - r < 0:
-            direct_x = -direct_x
-        y += direct_y
-        if y - r <= 0:
-            direct_y = -direct_y
-        if y + r >= 450:
-            y = random.randint(10, 200)
-            x = random.randint(10, 600)
-            # check_lose += 1
-            # check_win = 0
-            direct_y = 1
-            direct_x = 1
-            score = score
-            # game = True
-            done = False
-
-        pygame.display.update()
+            pygame.display.update()
 
 
 def col():
     pygame.display.update()
 
 
-# def ex():
-#     return False
+def ex():
+    Menu.no(opti)
 
-
-#     while ex_1:
-#         for even in pygame.event.get():
-#             if even.type == pygame.QUIT or even.type == pygame.KEYDOWN and even.key == pygame.K_ESCAPE:
-#                 quit()
-#         opti = False
-#         ex_1 = False
-#         game = True
-#
-#         pygame.display.update()
 
 def opti():
-#     # ex = False
-    menu_1 = Menu()
-    menu_1.append_option("coolor", None)
-    menu_1.append_option("exit", None)
-#
+    # ex = opti
     opti = True
+    menu_1 = Menu()
+    menu_1.append_option("coolor", not c)
+    menu_1.append_option("exit", ex)
     while opti:
         for even in pygame.event.get():
             if even.type == pygame.QUIT or even.type == pygame.KEYDOWN and even.key == pygame.K_ESCAPE:
@@ -168,18 +178,11 @@ def opti():
                     menu_1.switch(-1)
                 if even.key == pygame.K_RETURN:
                     menu_1.select()
-                    # opt = False
                 if even.key == pygame.K_BACKSPACE:
                     opti = False
-                # if even.key == pygame.K_RETURN == "exit":
-                #     ex = True
-                #     if ex == True:
-                #         opti = False
-#
+
         display.fill(black)
         menu_1.draw(display, 100, 50, 30)
-        # if opt == True:
-        #     q = False
         pygame.display.update()
 
 
