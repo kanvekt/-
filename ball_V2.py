@@ -8,6 +8,9 @@ size_x = 600
 size_y = 400
 black = (1, 1, 1)
 green = (100, 100, 100)
+orange = (150, 50, 0)
+blue = (0, 0, 200)
+
 global white
 white = (250, 250, 250)
 
@@ -53,6 +56,9 @@ class Menu:
 class color:
     up_color = black
 
+class ball_color:
+    ballup_color = white
+
 
 class image:
     up_image = surface
@@ -60,6 +66,10 @@ class image:
 
 class exit:
     up_exit = False
+
+
+class coordinates:
+    coordinate = 600
 
 
 def game_2():
@@ -147,20 +157,31 @@ def game_2():
             pygame.display.update()
 
 
-def orange():
-    color.up_color = (150, 50, 0)
+def orang():
+    image.up_image = surface
+    color.up_color = orange
+    ball_color.ballup_color = orange
+    coordinates.coordinate = 83
+
+
+def blu():
+    image.up_image = surface
+    color.up_color = blue
+    ball_color.ballup_color = blue
+    coordinates.coordinate = 133
 
 
 def blackk():
+    image.up_image = surface
     color.up_color = black
-
-
-def blue():
-    color.up_color = (0, 0, 200)
+    ball_color.ballup_color = white
+    coordinates.coordinate = 183
 
 
 def images():
     image.up_image = backgr_image2
+    ball_color.ballup_color = green
+    coordinates.coordinate = 233
 
 
 def ex():
@@ -170,8 +191,8 @@ def ex():
 def opti():
     opti = True
     menu_1 = Menu()
-    menu_1.append_option("orange", orange)
-    menu_1.append_option("blue", blue)
+    menu_1.append_option("orange", orang)
+    menu_1.append_option("blue", blu)
     menu_1.append_option("black", blackk)
     menu_1.append_option("image", images)
     menu_1.append_option("back", ex)
@@ -187,13 +208,16 @@ def opti():
                 if even.key == pygame.K_UP:
                     menu_1.switch(-1)
                 if even.key == pygame.K_RETURN:
+                    # pygame.draw.circle(display, white, (5, 5), 5)
                     menu_1.select()
+                    # menu_2.draw(display, 10, 10, 10)
                 if even.key == pygame.K_BACKSPACE:
                     opti = False
 
         display.fill(black)
         text_menu = font.render("выберете цвет фона", True, (green))
         display.blit(text_menu, (150, 15))
+        pygame.draw.circle(display, ball_color.ballup_color, (230, coordinates.coordinate), 10)
         menu_1.draw(display, 250, 70, 50)
         pygame.display.update()
 
