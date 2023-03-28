@@ -10,9 +10,6 @@ black = (1, 1, 1)
 green = (100, 100, 100)
 global white
 white = (250, 250, 250)
-global coll
-
-# coll = black
 
 display = pygame.display.set_mode((size_x, size_y))
 surf = pygame.Surface((size_x, size_y))
@@ -21,6 +18,8 @@ font_1 = pygame.font.Font(None, 25)
 font_score = pygame.font.Font(None, 65)
 clock = pygame.time.Clock()
 backgr_image = pygame.image.load("photo_2023-03-01_23-54-39.jpg")
+backgr_image2 = pygame.image.load("1626855870_23-p-fon-soti-krasnie-24.jpg")
+surface = pygame.Surface((size_x, size_y))
 
 score = 0
 check_win = 0
@@ -31,17 +30,6 @@ class Menu:
         self._option_surface = []
         self._callback = []
         self._option_index = 0
-        self._colors = []
-
-    def no(self, no):
-        no = False
-        self._option_surface.append(no)
-
-    def set_colors(self, green, xz):
-        gr = (100, 100, 100)
-        # x_z = (0, 150,100)
-        self._colors.append(green, gr)
-        # self._colors.append(xz, x_z)
 
     def append_option(self, option, callback):
         self._option_surface.append(font.render(option, True, white))
@@ -61,11 +49,18 @@ class Menu:
                 pygame.draw.rect(surf, green, option_rect)
             surf.blit(option, option_rect)
 
-c = False
-if c == True:
-    coll = white
-else:
-    coll = black
+
+class color:
+    up_color = black
+
+
+class image:
+    up_image = surface
+
+
+class exit:
+    up_exit = False
+
 
 def game_2():
     done = True
@@ -81,7 +76,6 @@ def game_2():
     check_win = 0
     global score
     score = score
-    # coll =
     a = False
     while done:
         if a:
@@ -123,7 +117,8 @@ def game_2():
                 direct_y = -direct_y
                 check_win += 1
 
-            display.fill(coll)
+            surface.fill(color.up_color)
+            display.blit(image.up_image, (0, 0))
             text_game_score = font_score.render(f"{check_win}", True, green)
             display.blit(text_game_score, (280, 170))
             # text_score = font_1.render(f"your score: {score}", True, green)
@@ -152,24 +147,39 @@ def game_2():
             pygame.display.update()
 
 
-def col():
-    pygame.display.update()
+def orange():
+    color.up_color = (150, 50, 0)
+
+
+def blackk():
+    color.up_color = black
+
+
+def blue():
+    color.up_color = (0, 0, 200)
+
+
+def images():
+    image.up_image = backgr_image2
 
 
 def ex():
-    Menu.no(opti)
+    exit.up_exit = True
 
 
 def opti():
-    # ex = opti
     opti = True
     menu_1 = Menu()
-    menu_1.append_option("coolor", not c)
-    menu_1.append_option("exit", ex)
+    menu_1.append_option("orange", orange)
+    menu_1.append_option("blue", blue)
+    menu_1.append_option("black", blackk)
+    menu_1.append_option("image", images)
+    menu_1.append_option("back", ex)
     while opti:
+        if exit.up_exit == True:
+            opti = False
         for even in pygame.event.get():
             if even.type == pygame.QUIT or even.type == pygame.KEYDOWN and even.key == pygame.K_ESCAPE:
-                opti = False
                 quit()
             if even.type == pygame.KEYDOWN:
                 if even.key == pygame.K_DOWN:
@@ -182,7 +192,9 @@ def opti():
                     opti = False
 
         display.fill(black)
-        menu_1.draw(display, 100, 50, 30)
+        text_menu = font.render("выберете цвет фона", True, (green))
+        display.blit(text_menu, (150, 15))
+        menu_1.draw(display, 250, 70, 50)
         pygame.display.update()
 
 
@@ -193,6 +205,8 @@ menu.append_option("exit", quit)
 
 game = True
 while game:
+    if game == True:
+        exit.up_exit = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             game = False
